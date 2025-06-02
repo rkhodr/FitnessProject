@@ -10,6 +10,8 @@ export interface WorkoutEntry {
   date: string;
   lift: string;
   weight: number;
+  reps: number;
+  sets: number;
 }
 
 export interface MealEntry {
@@ -18,7 +20,7 @@ export interface MealEntry {
   calories: number;
   protein: number;
   weight?: number;
-  mealType: 'daily';
+  mealType: 'breakfast' | 'lunch' | 'dinner' | 'snack';
 }
 
 export interface DateValue {
@@ -36,4 +38,15 @@ export interface WeeklyProgress {
     calories: DateValue[];
     weight: DateValue[];
   };
+}
+
+export interface GymData {
+  squat: DateValue[];
+  bench: DateValue[];
+  deadlift: DateValue[];
+}
+
+export interface DailyStats {
+  calories: DateValue[];
+  weight: DateValue[];
 } 

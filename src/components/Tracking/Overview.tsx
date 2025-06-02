@@ -1,47 +1,30 @@
 import * as React from 'react';
 import { useData } from '../../context/DataContext';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-
-interface WorkoutEntry {
-  id: string;
-  date: string;
-  lift: string;
-  weight: number;
-  reps: number;
-  sets: number;
-}
-
-interface MealEntry {
-  id: string;
-  date: string;
-  calories: number;
-  protein: number;
-  weight?: number;
-  mealType: 'breakfast' | 'lunch' | 'dinner' | 'snack';
-}
+import { WorkoutEntry, MealEntry } from '../../types';
 
 const Overview = () => {
   const { workouts, meals } = useData();
 
   // Process weight data
   const weightData = meals
-    .filter((meal: MealEntry) => meal.weight)
-    .map((meal: MealEntry) => ({
+    .filter((meal) => meal.weight)
+    .map((meal) => ({
       date: meal.date,
       weight: meal.weight
     }))
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   // Process lift progress
-  const liftProgress = {
-    squat: [] as Array<{ date: string; weight: number }>,
-    bench: [] as Array<{ date: string; weight: number }>,
-    deadlift: [] as Array<{ date: string; weight: number }>
+  const liftProgress: Record<string, Array<{ date: string; weight: number }>> = {
+    squat: [],
+    bench: [],
+    deadlift: []
   };
 
-  workouts.forEach((workout: WorkoutEntry) => {
+  workouts.forEach((workout) => {
     if (workout.lift in liftProgress) {
-      liftProgress[workout.lift as keyof typeof liftProgress].push({
+      liftProgress[workout.lift].push({
         date: workout.date,
         weight: workout.weight
       });
@@ -50,7 +33,7 @@ const Overview = () => {
 
   // Sort lift progress by date
   Object.keys(liftProgress).forEach(lift => {
-    liftProgress[lift as keyof typeof liftProgress].sort(
+    liftProgress[lift].sort(
       (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
     );
   });
@@ -103,7 +86,7 @@ const Overview = () => {
         <div className="bg-white p-4 rounded-lg shadow">
           <h3 className="text-lg font-semibold mb-2">Weight Change</h3>
           <p className="text-3xl font-bold text-indigo-600">
-            {weightData.length > 1
+            {weightData.length > 1 && weightData[weightData.length - 1]?.weight && weightData[0]?.weight
               ? `${(weightData[weightData.length - 1].weight - weightData[0].weight).toFixed(1)} lbs`
               : 'No data'}
           </p>

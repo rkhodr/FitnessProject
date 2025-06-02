@@ -43,19 +43,23 @@ app.post('/api/chat', async (req, res) => {
       throw new Error('Anthropic API key not found');
     }
 
-    // Format messages for the API
-    const messages = [
-      {
-        role: 'user',
-        content: message
-      }
-    ];
+    // Format messages for the API including conversation history
+    const apiMessages = conversationHistory.map(msg => ({
+      role: msg.role,
+      content: msg.content
+    }));
+    
+    // Add the new message
+    apiMessages.push({
+      role: 'user',
+      content: message
+    });
 
     console.log('Calling Anthropic API...');
     const completion = await anthropic.messages.create({
       model: 'claude-3-opus-20240229',
       max_tokens: 1000,
-      messages: messages,
+      messages: apiMessages,
       system: SYSTEM_PROMPT
     });
     console.log('Received response from Anthropic');
