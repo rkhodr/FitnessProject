@@ -8,16 +8,18 @@ import { ChatMessage as ChatMessageType } from '../types';
 const GymCoach = () => {
   const { messages, addMessage } = useData();
   const [isLoading, setIsLoading] = useState(false);
+  const [welcomeMessageSent, setWelcomeMessageSent] = useState(false);
 
   useEffect(() => {
-    // Add initial welcome message if there are no messages
-    if (messages.length === 0) {
+    // Add initial welcome message if there are no messages and it hasn't been sent yet
+    if (messages.length === 0 && !welcomeMessageSent) {
       addMessage({
         text: "👋 Hi! I'm Coach Carl. I can help you with workout plans, form checks, nutrition advice, and tracking your progress. What would you like to know?",
         sender: 'ai'
       });
+      setWelcomeMessageSent(true);
     }
-  }, []); // Run only once when component mounts
+  }, [messages.length, addMessage, welcomeMessageSent]);
 
   const handleSendMessage = async (text: string) => {
     // Add user message

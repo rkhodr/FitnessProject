@@ -19,8 +19,8 @@ export interface MealEntry {
   date: string;
   calories: number;
   protein: number;
-  weight?: number;
-  mealType: 'breakfast' | 'lunch' | 'dinner' | 'snack';
+  name: string;
+  time: string;
 }
 
 export interface DateValue {
@@ -37,6 +37,7 @@ export interface WeeklyProgress {
   dailyStats: {
     calories: DateValue[];
     weight: DateValue[];
+    protein: DateValue[];
   };
 }
 
@@ -49,4 +50,5 @@ export interface GymData {
 export interface DailyStats {
   calories: DateValue[];
   weight: DateValue[];
+  protein: DateValue[];
 } 

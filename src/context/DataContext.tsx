@@ -11,6 +11,7 @@ interface WeeklyProgress {
   dailyStats: {
     calories: { date: string; value: number }[];
     weight: { date: string; value: number }[];
+    protein: { date: string; value: number }[];
   };
 }
 
@@ -24,7 +25,7 @@ interface DataContextType {
   addWorkout: (workout: Omit<WorkoutEntry, 'id'>) => void;
   addMeal: (meal: Omit<MealEntry, 'id'>) => void;
   addGymData: (date: string, squat: number, bench: number, deadlift: number) => void;
-  addDailyStats: (date: string, calories: number, weight: number) => void;
+  addDailyStats: (date: string, calories: number, weight: number, protein: number) => void;
   clearError: () => void;
 }
 
@@ -56,6 +57,7 @@ export const DataProvider = ({ children }: DataProviderProps) => {
     dailyStats: {
       calories: [],
       weight: [],
+      protein: [],
     },
   });
 
@@ -125,16 +127,20 @@ export const DataProvider = ({ children }: DataProviderProps) => {
     }
   };
 
-  const addDailyStats = (date: string, calories: number, weight: number) => {
+  const addDailyStats = (date: string, calories: number, weight: number, protein: number) => {
     try {
       setWeeklyProgress(prev => {
         // Helper function to update daily stats
-        const updateDailyStats = (statsData: { date: string; value: number }[], newValue: number) => {
+        const updateDailyStats = (statsData: { date: string; value: number }[], newValue: number, isWeight: boolean) => {
           const existingIndex = statsData.findIndex(entry => entry.date === date);
           if (existingIndex >= 0) {
-            // Update existing entry
+            // For weight, replace the value; for calories and protein, add to existing value
+            const currentValue = statsData[existingIndex].value;
             const newData = [...statsData];
-            newData[existingIndex] = { date, value: newValue };
+            newData[existingIndex] = { 
+              date, 
+              value: isWeight ? newValue : currentValue + newValue 
+            };
             return newData;
           } else {
             // Add new entry
@@ -145,8 +151,9 @@ export const DataProvider = ({ children }: DataProviderProps) => {
         return {
           ...prev,
           dailyStats: {
-            calories: updateDailyStats(prev.dailyStats.calories, calories),
-            weight: updateDailyStats(prev.dailyStats.weight, weight),
+            calories: updateDailyStats(prev.dailyStats.calories, calories, false),
+            weight: updateDailyStats(prev.dailyStats.weight, weight, true),
+            protein: updateDailyStats(prev.dailyStats.protein, protein, false),
           },
         };
       });

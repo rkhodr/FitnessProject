@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import Header from '../components/common/Header';
-import ProgressSummary from '../components/ProgressTracker/ProgressSummary';
-import ProgressCharts from '../components/ProgressTracker/ProgressCharts';
+import Overview from '../components/Tracking/Overview';
 import { useData } from '../context/DataContext';
 import WorkoutLog from '../components/Tracking/WorkoutLog';
 import MealLog from '../components/Tracking/MealLog';
@@ -15,12 +14,8 @@ const Progress = () => {
     switch (activeTab) {
       case 'overall':
         return (
-          <div className="space-y-6">
-            <ProgressSummary data={weeklyProgress} />
-            <ProgressCharts 
-              gymData={weeklyProgress.gymData} 
-              dailyStats={weeklyProgress.dailyStats} 
-            />
+          <div className="bg-gray-50 rounded-lg">
+            <Overview />
           </div>
         );
       case 'workout':
@@ -77,7 +72,7 @@ const Progress = () => {
         </div>
 
         {/* Content Area */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <main className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           {renderContent()}
         </main>
       </div>
