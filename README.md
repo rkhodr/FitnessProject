@@ -28,4 +28,4 @@ A React-based web application for tracking fitness progress and getting AI-power
 
 - Backend:
   - Express.js
-  - OpenAI API (GPT-4)
+  - Claude
