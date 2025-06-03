@@ -1,5 +1,7 @@
 # Spottr
 
+Watch my project showcase [here](https://drive.google.com/file/d/1-5Ea45aFlJx4TnvP1Rp_Pt4fDHRsJeil/view?usp=drive_link)
+
 A React-based web application for tracking fitness progress and getting AI-powered coaching advice from Coach Carl. The application features a chat interface with an AI coach and a comprehensive progress tracking system.
 
 ## Features
