@@ -8,7 +8,9 @@ import { ChatMessage as ChatMessageType } from '../types';
 const GymCoach = () => {
   const { messages, addMessage } = useData();
   const [isLoading, setIsLoading] = useState(false);
-  const [welcomeMessageSent, setWelcomeMessageSent] = useState(false);
+  const [welcomeMessageSent, setWelcomeMessageSent] = useState(() => {
+    return localStorage.getItem('welcomeMessageSent') === 'true';
+  });
 
   useEffect(() => {
     // Add initial welcome message if there are no messages and it hasn't been sent yet
@@ -18,6 +20,7 @@ const GymCoach = () => {
         sender: 'ai'
       });
       setWelcomeMessageSent(true);
+      localStorage.setItem('welcomeMessageSent', 'true');
     }
   }, [messages.length, addMessage, welcomeMessageSent]);
 

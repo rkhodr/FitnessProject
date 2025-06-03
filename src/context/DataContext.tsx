@@ -69,7 +69,21 @@ export const DataProvider = ({ children }: DataProviderProps) => {
       id: message.id || crypto.randomUUID(),
       timestamp: Date.now()
     };
-    setMessages(prev => [...prev, newMessage]);
+    
+    // Check for duplicate messages within a 2-second window
+    setMessages(prev => {
+      const recentDuplicate = prev.find(
+        msg => 
+          msg.text === newMessage.text && 
+          msg.sender === newMessage.sender &&
+          Math.abs((msg.timestamp || 0) - (newMessage.timestamp || 0)) < 2000
+      );
+      
+      if (recentDuplicate) {
+        return prev;
+      }
+      return [...prev, newMessage];
+    });
   };
 
   const addWorkout = (workout: Omit<WorkoutEntry, 'id'>) => {
